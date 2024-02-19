@@ -6,14 +6,21 @@ public class Question {
 	String queDifficulty;
 	String queCategory;
 	String queName;
+	String queStatus;
 	
-	public Question(String queId, String queLink, String queDifficulty, String queCategory, String queName) {
+	public Question(String queId, String queLink, String queDifficulty, String queCategory, String queName,
+			String queStatus) {
 		super();
 		this.queId = queId;
 		this.queLink = queLink;
 		this.queDifficulty = queDifficulty;
 		this.queCategory = queCategory;
 		this.queName = queName;
+		this.queStatus = queStatus;
+	}
+	
+	public String getQueStatus() {
+		return queStatus;
 	}
 
 	public String getQueId() {

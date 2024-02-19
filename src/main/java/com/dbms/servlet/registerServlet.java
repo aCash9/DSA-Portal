@@ -33,7 +33,6 @@ public class registerServlet extends HttpServlet {
 			response.sendRedirect("login.jsp?error=2");
 		} else {
 			response.sendRedirect("register.jsp?error=1");
-			System.out.print("error!!");
 		}	
 	}
 

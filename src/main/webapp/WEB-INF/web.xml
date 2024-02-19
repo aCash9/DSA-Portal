@@ -39,4 +39,24 @@
     <servlet-name>logoutServlet</servlet-name>
     <url-pattern>/logoutServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>updateQuestion</display-name>
+    <servlet-name>updateQuestion</servlet-name>
+    <servlet-class>com.dbms.servlet.updateQuestion</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>updateQuestion</servlet-name>
+    <url-pattern>/updateQuestion</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>welcomeServlet</display-name>
+    <servlet-name>welcomeServlet</servlet-name>
+    <servlet-class>com.dbms.servlet.welcomeServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>welcomeServlet</servlet-name>
+    <url-pattern>/welcomeServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

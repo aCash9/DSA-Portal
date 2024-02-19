@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.dbms.objects.Question;
@@ -14,7 +16,8 @@ import com.dbms.util.DButil;
 public class userDao {
 
 	public boolean isValidUser(String email, String password) {
-		String query = new queries().verifyUser;
+		new queries();
+		String query = queries.verifyUser;
 		try(Connection connection = DButil.getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(query);
 			
@@ -31,7 +34,8 @@ public class userDao {
 	}
 	
 	public String getUserName(String email) {
-		String query = new queries().getUserName;
+		new queries();
+		String query = queries.getUserName;
 		try(Connection connection = DButil.getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(query);
 			
@@ -50,7 +54,8 @@ public class userDao {
 	}
 
 	public boolean registerUser(User user1) {
-		String query = new queries().addUser;
+		new queries();
+		String query = queries.addUser;
 		try(Connection connection = DButil.getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(query);
 			
@@ -68,7 +73,8 @@ public class userDao {
 	}
 	
 	public static boolean addQuestions(Question que) {
-		String query = new queries().addQuestion;
+		new queries();
+		String query = queries.addQuestion;
 		try(Connection connection = DButil.getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(query);
 			
@@ -96,16 +102,43 @@ public class userDao {
 			String queId = sc.nextLine();
 			if(queId.equals("-1"))	break;
 			
-			String queLink = sc.nextLine();
-			String queDifficulty = sc.nextLine();
-			String queCategory = "Arrays";
-			String queName = sc.nextLine();
+			List<String> list = getQueDetails(queId);
 			
-			question que = new question(queId, queLink, queDifficulty, queCategory, queName);
+			queId = list.get(0);
+			String queName = list.get(1);
+			String queDifficulty = list.get(2);
+			
+			String queLink = makeURL(queName);
+			String queCategory = "Priority Queues";
+			Question que = new Question(queId, queLink, queDifficulty, queCategory, queName);
+			
+			//System.out.println(queId + " " + queName + " " + queDifficulty);
 			System.out.println(addQuestions(que));
 		}
 		
 		sc.close();
 	}
 	*/
+	public static String makeURL(String name) {
+		String str1 = "https://leetcode.com/problems/";
+		String str2 = "/description/";
+		
+		name = name.toLowerCase();
+		name = name.replace(' ', '-');
+		String ans = str1 + name + str2;
+		return ans;
+	}
+	
+	public static List<String> getQueDetails(String str) {
+		List<String> list = new ArrayList<>();
+		String[] ans = str.split(" ");
+		list.add(ans[0].substring(0, ans[0].length() - 1));
+		String temp = "";
+		for(int i = 1; i < ans.length - 1; i++) {
+			temp += ans[i] + " ";
+		}
+		list.add(temp);
+		list.add(ans[ans.length - 1]);
+		return list;
+	}
 }
