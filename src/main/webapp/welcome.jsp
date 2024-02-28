@@ -3,16 +3,19 @@
 <%@ page import="jakarta.servlet.http.HttpSession"%>
 <%@ page import="com.dbms.dao.questionsDao"%>
 <%@ page import="java.util.List"%>
+
+<%@ page import="com.dbms.dao.UserListDao"%>
+<%@ page import="com.dbms.objects.ListDetails"%>
 <%@ page import="com.dbms.objects.Question"%>
 <!DOCTYPE html>
 
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
 <link rel="stylesheet" href="styles/styleWelcome.css">
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -22,10 +25,12 @@
 	if (s != null && s.getAttribute("userName") != null && s.getAttribute("email") != null) {
 		String userName = (String) s.getAttribute("userName");
 		userEmail = (String) s.getAttribute("email");
+		UserListDao dao = new UserListDao();
+		List<ListDetails> list = dao.getUserLists(userEmail);
 	%>
 	<div class="sidebar close">
 		<div class="logo-details">
-			<i class='bx bx-code-block'></i> <span class="logo_name">DBMS</span>
+			<i class='bx bx-code-block' style='color: #c35deb'></i> <span class="logo_name">DBMS</span>
 		</div>
 		<ul class="nav-links">
 			<li><a href="arrays.jsp"> <i class='bx bx-list-ol icon'></i>
@@ -73,18 +78,31 @@
 				<ul class="sub-menu blank">
 					<li><a class="link_name" href="tree.jsp">Trees</a></li>
 				</ul></li>
-			<!-- <li>
+				
+			 <li>
 				<div class="iocn-link">
-					<a href="#"> <i class='bx bx-plug'></i> <span class="link_name">Plugins</span>
+					<a href="#"> <i class='bx bxs-user-detail'></i> <span class="link_name">Your Lists</span>
 					</a> <i class='bx bxs-chevron-down arrow'></i>
 				</div>
 				<ul class="sub-menu">
-					<li><a class="link_name" href="#">Plugins</a></li>
-					<li><a href="#">UI Face</a></li>
-					<li><a href="#">Pigments</a></li>
-					<li><a href="#">Box Icons</a></li>
+					<li><a class="link_name" href="#">Your Lists</a></li>
+					<% 
+						boolean flag = true;
+						for (ListDetails d : list) {
+							flag = false;
+					%>	
+						<li><a href="userListPage.jsp?listID=<%=d.getListID()%>&includeCompany=<%=d.getIncludeCompany()%>"><%=d.getListName()%></a></li>
+					<%
+						}
+						if(flag) {
+						%>
+						<li><a href="#">No list</a></li>
+					<% 
+						}
+					%>
 				</ul>
 			</li>
+			<!--
 			<li><a href="#"> <i class='bx bx-compass'></i> <span
 					class="link_name">Explore</span>
 			</a>
@@ -125,25 +143,51 @@
 		</div>
 		<div class="container">
 			<h2>Create Your List</h2>
-			<form id="listForm">
-				<label for="listName">List Name:</label> <input type="text"
-					id="listName" name="listName" required> <label
-					for="listDescription">List Description:</label> <input type="text"
-					id="listDescription" name="listDescription" required> <label
-					for="includeCompany">Include Company:</label> <input
-					type="checkbox" id="includeCompany" name="includeCompany">
+			<form id="listForm" method="post" action="welcomeServlet">
+
+				<input placeholder="List Name" type="text" name="text" id="listName"
+					name="listName" class="input" autocomplete="off">
+				
+				<input
+					placeholder="Description" type="text" name="text"
+					id="listDescription" name="listDescription" class="input" autocomplete="off">
+
+				<div class="includeCompanyParent">
+					<div class="includeCompany">
+						<p>Include Company:</p>
+					</div>
+					<div class="switch-container">
+						<label class="switch"> <input type="checkbox"
+							id="includeCompany"> <span class="slider"></span>
+						</label>
+					</div>
+				</div>
+
+				<div style="clear: both;"></div>
 
 				<!-- Button to create the list table -->
-				<button type="button" onclick="createListTable()">Create</button>
+				<button class="createButton" id="createTable" type="button"
+					onclick="createListTable()">
+					Create Table
+						<svg fill="currentColor" viewBox="0 0 24 24" class="icon">
+	    					<path clip-rule="evenodd"
+									d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+									fill-rule="evenodd">
+							</path>
+	  					</svg>
+				</button>
 
-
-				<!-- Button to add questions -->
-				<button id="addQuestionBtn" type="button" onclick="addQuestion()"
-					disabled>Add Question</button>
+				<button style="margin-bottom: 10px;" class="createButton" id="submitListBtn" type="button" onclick="submitList()"
+					hidden="true">Finish
+				</button>
+				
+				
+				<button  class="createButton" id="addQuestionBtn" type="button" onclick="addQuestion()"
+					hidden="true">Add Question
+				</button>
 
 				<!-- Button to submit the list -->
-				<button id="submitListBtn" type="button" onclick="submitList()"
-					disabled>Finish</button>
+				
 				<!-- Container for dynamically added questions -->
 				<div id="questionsContainer">
 					<!-- Questions will be added here -->
@@ -159,126 +203,158 @@
 	response.sendRedirect("login.jsp");
 	}
 	%>
-
+	<script src="script.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	<script>
-  			let arrow = document.querySelectorAll(".arrow");
-			for (var i = 0; i < arrow.length; i++) {
-			   	arrow[i].addEventListener("click", (e)=>{
-			  		let arrowParent = e.target.parentElement.parentElement;
-			  	 	arrowParent.classList.toggle("showMenu");
-			    });
-		    }
-		  let sidebar = document.querySelector(".sidebar");
-		  let sidebarBtn = document.querySelector(".bx-menu");
-		  console.log(sidebarBtn);
-		  
-		  sidebarBtn.addEventListener("click", ()=>{
-		  	  sidebar.classList.toggle("close");
-		  });
-		  
-		  let codeBtn = document.querySelector(".bx-code-block");
-		  console.log(codeBtn);
-		  
-		  codeBtn.addEventListener("click", ()=>{
-		  	  sidebar.classList.toggle("close");
-		  });
-		  function logout() {
-				var form = document.createElement('form');
-			    form.method = 'post';
-			    form.action = 'logoutServlet';
-			    document.body.appendChild(form);
-			  	form.submit();
-			}
-//Your JavaScript code goes here
-			function createListTable() {
-		       	$('#addQuestionBtn').prop('disabled', false);
-		        $('#submitListBtn').prop('disabled', false);
+		document.getElementById("submitListBtn").style.display = "none";
+		document.getElementById("addQuestionBtn").style.display = "none";
+		function createListTable() {
+			if(validateForm()) {
+				document.getElementById("createTable").style.display = "none";
+				document.getElementById("addQuestionBtn").style.display = "block";
 		        $('#includeCompany').prop('disabled', true);
-		    }
+			}	
+	    }
     
-		function addQuestion() {
-		    const includeCompany = $('#includeCompany').prop('checked');
-		
-		    // Create a table if not already created
-		    if ($('#questionsTable').length === 0) {
-		        const tableHeader = '<tr>' +
-		            '<th>Question ID</th>' +
-		            '<th>Question Name</th>' +
-		            '<th>Question Difficulty</th>' +
-		            (includeCompany ? '<th>Company</th>' : '') +
-		            '</tr>';
-		        $('#questionsContainer').html('<table id="questionsTable">' + tableHeader + '</table>');
-		    }
-		
-		    // Get input values
-		    const queID = '<input type="text" name="queID[]" required>';
-		    const queName = '<input type="text" name="queName[]" required>';
-		    const queDifficulty = '<input type="text" name="queDifficulty[]" required>';
-		    const queCompany = includeCompany ? '<input type="text" name="queCompany[]">' : '';
-		
-		    // Append a new row to the table
-		    const newRow =
-		        '<tr>' +
-		        '<td>' + queID + '</td>' +
-		        '<td>' + queName + '</td>' +
-		        '<td>' + queDifficulty + '</td>' +
-		        (includeCompany ? '<td>' + queCompany + '</td>' : '') +
-		        '</tr>';
-		
-		    $('#questionsTable').append(newRow);
-		}
-
-
-
+			function addQuestion() {
+				document.getElementById("submitListBtn").style.display = "block";
+			    const includeCompany = $('#includeCompany').prop('checked');
+			
+			    // Create a table if not already created
+			    if ($('#questionsTable').length === 0) {
+			        const tableHeader = '<tr>' +
+			            '<th>Question ID</th>' +
+			            '<th>Question Name</th>' +
+			            '<th>Question Difficulty</th>' +
+			            (includeCompany ? '<th>Company</th>' : '') +
+			            '</tr>';
+			        $('#questionsContainer').html('<table id="questionsTable">' + tableHeader + '</table>');
+			    }
+			
+			    // Get input values
+			    const queID = '<input type="text" name="queID[]" required>';
+			    const queName = '<input type="text" name="queName[]" required>';
+			    const queDifficulty = '<input type="text" name="queDifficulty[]" required>';
+			    const queCompany = includeCompany ? '<input type="text" name="queCompany[]">' : '';
+			
+			    // Append a new row to the table
+			    const newRow =
+			        '<tr>' +
+			        '<td>' + queID + '</td>' +
+			        '<td>' + queName + '</td>' +
+			        '<td>' + queDifficulty + '</td>' +
+			        (includeCompany ? '<td>' + queCompany + '</td>' : '') +
+			        '</tr>';
+			
+			    $('#questionsTable').append(newRow);
+			    adjustTableWidthToContainer();
+			}
+			
+			function adjustContainerDimensions() {
+			    const container = $('.container');
+			    const questionsTableWidth = $('#questionsTable').outerWidth(true);
+			    const currentContainerWidth = container.width();
+			    const newContainerWidth = Math.max(currentContainerWidth, questionsTableWidth);
+			    container.css('width', newContainerWidth + 'px');
+			}
+			
 		  function displayQuestion(questionText) {
 		      let questionsContainer = $('#questionsContainer');
-		      // Dynamically create HTML for each question and append it to the container
 		      let questionHtml = `<div class="question">${questionText}</div>`;
 		      questionsContainer.append(questionHtml);
 		  }
-
+		  
 		  function submitList() {
+			    console.log("button clicked");
+
+			    // Extract data from the form
 			    var listName = $('#listName').val();
 			    var listDescription = $('#listDescription').val();
 			    var includeCompany = $('#includeCompany').prop('checked');
 			    var userEmail = '<%=userEmail%>';
 
-			    // Collect question texts into an array
-			    var questionsArray = [];
-			    $('.question').each(function() {
-			        questionsArray.push({
-			            queID: $(this).find('input[name="queID[]"]').val(),
-			            queName: $(this).find('input[name="queName[]"]').val(),
-			            queDifficulty: $(this).find('input[name="queDifficulty[]"]').val(),
-			            queCompany: includeCompany ? $(this).find('input[name="queCompany[]"]').val() : ''
-			        });
+			    // Collect question texts into separate arrays
+			    var queIDs = [];
+			    var queNames = [];
+			    var queDifficulties = [];
+			    var queCompanies = [];
+
+			    // Iterate over table rows and collect data
+			    $('#questionsTable tbody tr').each(function () {
+			        var queID = $(this).find('input[name="queID[]"]').val();
+			        var queName = $(this).find('input[name="queName[]"]').val();
+			        var queDifficulty = $(this).find('input[name="queDifficulty[]"]').val();
+			        var queCompany = includeCompany ? $(this).find('input[name="queCompany[]"]').val() : '';
+
+			        queIDs.push(queID);
+			        queNames.push(queName);
+			        queDifficulties.push(queDifficulty);
+			        queCompanies.push(queCompany);
 			    });
 
-			    // Prepare data to send to the servlet
-			    var data = {
+			    console.log("queIDs:", queIDs);
+			    console.log("queNames:", queNames);
+			    console.log("queDifficulties:", queDifficulties);
+			    console.log("queCompanies:", queCompanies);
+	
+			    // Prepare data as an object
+			    var requestData = {
 			        listName: listName,
 			        listDescription: listDescription,
 			        includeCompany: includeCompany,
 			        userEmail: userEmail,
-			        questions: questionsArray
+			        queIDs: queIDs,
+			        queNames: queNames,
+			        queDifficulties: queDifficulties,
+			        queCompanies: queCompanies
 			    };
-
-			    // Use AJAX to send data to the servlet
+				console.log(JSON.stringify(requestData));
+			    // Perform AJAX request
 			    $.ajax({
 			        type: 'POST',
-			        url: 'welcomeServlet', // Update with your servlet endpoint
-			        contentType: 'application/x-www-form-urlencoded',
-			        data: data, // jQuery will serialize the data object in the standard form format
-			        success: function(response) {
-			            console.log('List submitted successfully.');
-			            // Optionally, you can redirect the user or perform other actions
+			        url: 'welcomeServlet',
+			        contentType: 'application/json', // Set content type to JSON
+			        data: JSON.stringify(requestData), // Convert data to JSON string
+			        success: function (response) {
+			            // Handle success response from the servlet
+			            console.log('Success:', response);
+			            alert('List submitted successfully!');
+			            
+			            // Refresh the page
+			            location.reload();
 			        },
-			        error: function(error) {
-			            console.error('Error submitting list.');
+			        error: function (error) {
+			            // Handle error response from the servlet
+			             alert('Please retry');
+			            console.error('Error:', error);
 			        }
 			    });
 			}
-  </script>
+		  function validateForm() {
+			    // Get values from the input fields
+			    var listName = document.getElementById("listName").value;
+			    var description = document.getElementById("listDescription").value;
+
+			    // Check if listName is filled and within the length limit
+			    if (listName.trim() === '') {
+			        alert("Please enter the list name");
+			        return false;
+			    }
+			    if(listName.length > 20) {
+			    	alert("List Name is too long");
+			    }
+			    
+			    if (description.trim() === '') {
+			        alert("Please enter the description");
+			        return false;
+			    }
+			    if(description.length > 50) {
+			    	alert("Description is too long");
+			    	return false;
+			    }
+			    return true;
+			}
+		  
+ 	</script>
 </body>
 </html>

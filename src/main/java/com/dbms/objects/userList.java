@@ -1,42 +1,41 @@
 package com.dbms.objects;
 
-public class userList {
-	String queID;
-	String queName;
-	String queStatus;
-	String queDifficulty;
-	String queCompany;
-	
-	public userList(String queID, String queName, String queStatus, String queDifficulty) {
-		this.queID = queID;
-		this.queName = queName;
-		this.queStatus = queStatus;
-		this.queDifficulty = queDifficulty;
-		this.queCompany = "Default";
-		
+import java.util.List;
+
+public class UserList {
+	private String listName;
+    private String listDescription;
+    private String includeCompany;
+    private String userEmail;
+    private List<UserQueList> queList;
+    
+	public UserList(String listName, String listDescription, String includeCompany, String userEmail,
+			List<UserQueList> queList) {
+		this.listName = listName;
+		this.listDescription = listDescription;
+		this.includeCompany = includeCompany;
+		this.userEmail = userEmail;
+		this.queList = queList;
 	}
-	public userList(String queID, String queName, String queStatus, String queDifficulty, String queCompany) {
-		this.queID = queID;
-		this.queName = queName;
-		this.queStatus = queStatus;
-		this.queDifficulty = queDifficulty;
-		this.queCompany = queCompany;
+
+	public String getListName() {
+		return listName;
 	}
-	public String getQueID() {
-		return queID;
+
+	public String getListDescription() {
+		return listDescription;
 	}
-	public String getQueName() {
-		return queName;
+
+	public String isIncludeCompany() {
+		return includeCompany;
 	}
-	public String getQueStatus() {
-		return queStatus;
+
+	public String getUserEmail() {
+		return userEmail;
 	}
-	public String getQueDifficulty() {
-		return queDifficulty;
+
+	public List<UserQueList> getQueList() {
+		return queList;
 	}
-	public String getQueCompany() {
-		return queCompany;
-	}
-	
 	
 }

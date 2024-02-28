@@ -1,38 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="jakarta.servlet.http.HttpSession"%>
-<%@ page import="com.dbms.dao.questionsDao"%>
+<%@ page import="com.dbms.dao.UserListDao"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.dbms.objects.Question"%>
-<%@ page import="com.dbms.dao.UserListDao"%>
 <%@ page import="com.dbms.objects.ListDetails"%>
 <!DOCTYPE html>
 
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="styleQuestionPages.css">
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
+<link rel="stylesheet" href="styleQuestionPages.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
 	<%
 	HttpSession s = request.getSession();
 	String userEmail = "";
 	if (s != null && s.getAttribute("userName") != null && s.getAttribute("email") != null) {
 		String userName = (String) s.getAttribute("userName");
 		userEmail = (String) s.getAttribute("email");
+		String listID = request.getParameter("listID");
+		String includeCompany = request.getParameter("includeCompany");
 		UserListDao dao = new UserListDao();
 		List<ListDetails> userList = dao.getUserLists(userEmail);
 	%>
+	<style>
+		<% if(includeCompany.equals("true")) {
+		%>
+			
+		.table td:nth-child(2) {
+	color: white;
+	text-align: center; /* Making the question name bold */
+	}
+.table td:nth-child(3) {
+	text-align: center; /* Making the question name bold */
+}
+.table td:nth-child(4) {
+	text-align: center; /* Making the question name bold */
+	}
+	.table td:nth-child(5) {
+	text-align: center; 
+	color: white;/* Making the question name bold */
+	}
+		<%
+			} else {
+				%>
+				.table td:nth-child(2) {
+	text-align: center; /* Making the question name bold */
+	}
+			.table td:nth-child(3) {
+	text-align: center; /* Making the question name bold */
+	}
+				<%
+			}
+		%>
+	</style>
+</head>
+<body>
 	<div class="sidebar close">
 		<div class="logo-details">
 			<i class='bx bx-code-block'></i> <span class="logo_name">DBMS</span>
 		</div>
 		<ul class="nav-links">
-			<li><a href="arrays.jsp"> <i class='bx bx-list-ol icon'></i>
-					<span class="link_name">Arrays</span>
+			<li><a href="arrays.jsp"> <i class='bx bx-list-ol'
+					></i> <span class="link_name">Arrays</span>
 			</a>
 				<ul class="sub-menu blank">
 					<li><a class="link_name" href="arrays.jsp">Arrays</a></li>
@@ -70,7 +102,7 @@
 					<li><a class="link_name" href="priorityQueues.jsp">Priority
 							Queues</a></li>
 				</ul></li>
-			<li><a href="tree.jsp"> <i class='bx bxs-tree' style='color:#c35deb' ></i> <span
+			<li><a href="tree.jsp"> <i class='bx bxs-tree'></i> <span
 					class="link_name">Trees</span>
 			</a>
 				<ul class="sub-menu blank">
@@ -79,7 +111,7 @@
 				
 			<li>
 				<div class="iocn-link">
-					<a href="#"> <i class='bx bxs-user-detail'></i> <span class="link_name">Your Lists</span>
+					<a href="#"> <i class='bx bxs-user-detail' style='color: #c35deb'></i> <span class="link_name">Your Lists</span>
 					</a> <i class='bx bxs-chevron-down arrow'></i>
 				</div>
 				<ul class="sub-menu">
@@ -147,7 +179,7 @@
 	</div>
 	<section class="home-section">
 		<div class="home-content">
-			<i class='bx bx-menu'></i> <span class="text">Tree </span>
+			<i class='bx bx-menu'></i> <span class="text"><%=listID%> </span>
 		</div>
 		<table class="table">
 			<thead>
@@ -156,12 +188,19 @@
 					<th>Question Number</th>
 					<th>Name</th>
 					<th>Difficulty Level</th>
+					
+					<% if(includeCompany.equals("true")) {
+						%>
+						<th>Company</th>
+						<%
+					}
+					%>
 				</tr>
 			</thead>
 			<tbody>
 				<%
-				questionsDao queDao = new questionsDao();
-				List<Question> list = queDao.getQuestions("Trees", userEmail);
+				UserListDao queDao = new UserListDao();
+				List<Question> list = queDao.getListQuestions(listID, includeCompany);
 				for (Question question : list) {
 				%>
 				<tr>
@@ -175,7 +214,14 @@
 					<td><%=question.getQueId()%></td>
 					<td><a href="<%=question.getQueLink()%>" target="_blank"><%=question.getQueName()%></a></td>
 					<td class="<%=question.getQueDifficulty()%>"><%=question.getQueDifficulty()%></td>
-
+					<%
+						if(!question.getQueCategory().equals("none")) {
+							%>
+							<td><%=question.getQueCategory()%></td>
+							<%
+						}
+							
+					%>
 				</tr>
 				<%
 				}

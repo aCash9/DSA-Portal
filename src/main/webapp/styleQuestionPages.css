@@ -166,7 +166,7 @@
   width: 80%;
   margin-left: 10%;
   background-color: #082540;
-  height: 400px;
+  height: 100px;
 }
 
 .sidebar .profile-details{
@@ -263,21 +263,6 @@
 	transition: var(--tran-05);
 }
 
-.submit {
-	border-collapse: collapse;
-	width: 10%;
-	margin: 50px auto;
-	margin-top: 20px;
-	color: blue;
-	padding: 10px 20px;
-	background-color: #48C78E;
-	color: white;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	font-size: 16px;
-}
-
 .table th,
 .table td {
     border-top: 1px solid white; /* Keep only top border */
@@ -289,17 +274,12 @@
 }
 
 
-.table td:first-child {
-	text-align: left; /* Centering the content in the first column */
-}
-
-.table td:nth-child(2) {
-	color: white;
-	text-align: left; /* Making the question name bold */
-}
-
 .table td:nth-child(3) {
 	text-align: left; /* Making the question name bold */		
+}
+.table td:nth-child(2) {
+	text-align: center;
+	color: white; /* Making the question name bold */		
 }
 
 .table td:last-child {

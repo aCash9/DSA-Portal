@@ -10,8 +10,8 @@
     <div class="login wrap">
         <form action="loginServlet" method="post">
             <div class="h1">Login</div>
-            <input pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" placeholder="Email" id="email" name="email" type="text">
-            <input placeholder="Password" id="password" name="password" type="password">
+            <input autocomplete="off" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" placeholder="Email" id="email" name="email" type="text">
+            <input autocomplete="off" placeholder="Password" id="password" name="password" type="password">
             <input value="Login" class="btn" type="submit">
             <p><a href="register.jsp">New User? Register</a></p>
         </form>

@@ -4,15 +4,16 @@
 <%@ page import="com.dbms.dao.questionsDao"%>
 <%@ page import="java.util.List"%>
 <%@ page import="com.dbms.objects.Question"%>
+<%@ page import="com.dbms.dao.UserListDao"%>
+<%@ page import="com.dbms.objects.ListDetails"%>
 <!DOCTYPE html>
 
 <html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="styleQuestionPages.css">
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
-<link rel="stylesheet" href="styleTest.css">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -22,6 +23,8 @@
 	if (s != null && s.getAttribute("userName") != null && s.getAttribute("email") != null) {
 		String userName = (String) s.getAttribute("userName");
 		userEmail = (String) s.getAttribute("email");
+		UserListDao dao = new UserListDao();
+		List<ListDetails> userList = dao.getUserLists(userEmail);
 	%>
 	<div class="sidebar close">
 		<div class="logo-details">
@@ -73,6 +76,30 @@
 				<ul class="sub-menu blank">
 					<li><a class="link_name" href="tree.jsp">Trees</a></li>
 				</ul></li>
+				
+			<li>
+				<div class="iocn-link">
+					<a href="#"> <i class='bx bxs-user-detail'></i> <span class="link_name">Your Lists</span>
+					</a> <i class='bx bxs-chevron-down arrow'></i>
+				</div>
+				<ul class="sub-menu">
+					<li><a class="link_name" href="#">Your Lists</a></li>
+					<% 
+						boolean flag = true;
+						for (ListDetails d : userList) {
+							flag = false;
+					%>	
+						<li><a href="userListPage.jsp?listID=<%=d.getListID()%>&includeCompany=<%=d.getIncludeCompany()%>"><%=d.getListName()%></a></li>
+					<%
+						}
+						if(flag) {
+						%>
+						<li><a href="#">No list</a></li>
+					<% 
+						}
+					%>
+				</ul>
+			</li>
 			<!-- <li>
 				<div class="iocn-link">
 					<a href="#"> <i class='bx bx-plug'></i> <span class="link_name">Plugins</span>
@@ -165,33 +192,8 @@
 	%>
 
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="script.js"></script>
 	<script>
-  let arrow = document.querySelectorAll(".arrow");
-  for (var i = 0; i < arrow.length; i++) {
-    	arrow[i].addEventListener("click", (e)=>{
-   		let arrowParent = e.target.parentElement.parentElement;
-  	 	arrowParent.classList.toggle("showMenu");
-    });
-  }
-  let sidebar = document.querySelector(".sidebar");
-  let sidebarBtn = document.querySelector(".bx-menu");
-  console.log(sidebarBtn);
-  sidebarBtn.addEventListener("click", ()=>{
-  	  sidebar.classList.toggle("close");
-  });
-  let codeBtn = document.querySelector(".bx-code-block");
-  console.log(codeBtn);
-  codeBtn.addEventListener("click", ()=>{
-  	  sidebar.classList.toggle("close");
-  });
-  function logout() {
-		var form = document.createElement('form');
-	    form.method = 'post';
-	    form.action = 'logoutServlet';
-	    document.body.appendChild(form);
-  	form.submit();
-	}
-  
   function getDifficultyClass(difficulty) {
       if (difficulty.equals("Easy")) {
           return "easy";
