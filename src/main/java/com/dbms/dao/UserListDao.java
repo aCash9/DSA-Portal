@@ -25,13 +25,36 @@ public class UserListDao {
 		return ans;
 	}
 	
-	public List<Question> getListQuestions(String listID, String includeCompany) {
+	public ListDetails getListDetails(String listID) {
+		ListDetails ld = null;
+		
+		new queries();
+		String query = String.format(queries.getParticularUserList);
+		try(Connection connection = DButil.getConnection()) {
+			PreparedStatement ps = connection.prepareStatement(query);
+			ps.setString(1, listID);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				String listName = rs.getString("listName");
+				String listDescription = rs.getString("listDescription");
+				String includeCompany = rs.getString("includeCompany");
+				ld = new ListDetails(listID, listName, listDescription, includeCompany);
+	        }
+			
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return ld;
+	}
+	
+	public List<Question> getListQuestions(String listID, String includeCompany, String email) {
 		List<Question> list = new ArrayList<>();
 		new queries();
 		String query = String.format(queries.qetListQuestions, listID, listID);
 		try(Connection connection = DButil.getConnection()) {
 			PreparedStatement ps = connection.prepareStatement(query);
-			
+			ps.setString(1, email);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String queID = rs.getString("queID");
@@ -82,6 +105,23 @@ public class UserListDao {
 		return list;
 	}
 
+	
+	public void addUserSharedListToTable(ListDetails ld, String userEmail) {
+		new queries();
+		String query = queries.addUserList;
+		try (Connection connection = DButil.getConnection()) {
+			PreparedStatement ps = connection.prepareStatement(query);
+
+			ps.setString(1, ld.getListID());
+			ps.setString(2, ld.getListName());
+			ps.setString(3, ld.getListDescription());
+			ps.setString(4, userEmail);
+			ps.setString(5, ld.getIncludeCompany());
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void addUserListToTable(UserList userList, String listID) {
 		new queries();

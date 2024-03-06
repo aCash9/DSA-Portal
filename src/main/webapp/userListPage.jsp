@@ -200,7 +200,7 @@
 			<tbody>
 				<%
 				UserListDao queDao = new UserListDao();
-				List<Question> list = queDao.getListQuestions(listID, includeCompany);
+				List<Question> list = queDao.getListQuestions(listID, includeCompany, userEmail);
 				for (Question question : list) {
 				%>
 				<tr>

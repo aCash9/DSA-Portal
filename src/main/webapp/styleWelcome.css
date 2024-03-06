@@ -309,12 +309,52 @@
 	background: #e8e8e8;
 	width: auto;
 	max-width:780px;
-	margin-top: 50px;
+	margin-top: 30px;
+}
+
+.container1 {
+	display: flex;
+	margin: auto;
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 30px;
+	background: #e8e8e8;
+	width: auto;
+	max-width:780px;
+	align-items: center;
+	margin-top: 30px;
 }
 
 label {
 	display: block;
 	margin-bottom: 5px;
+}
+
+.input1 {
+	width: 100%;
+	max-width: 220px;
+	height: 45px;
+	padding: 12px;
+	margin-top: 0px;
+	margin-left: 30px;
+	border-radius: 12px;
+	border: 1.5px solid lightgrey;
+	outline: none;
+	transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+	box-shadow: 0px 0px 20px -18px;
+}
+
+.input1:hover {
+	border: 2px solid lightgrey;
+	box-shadow: 0px 0px 20px -17px;
+}
+
+.input1:active {
+	transform: scale(0.95);
+}
+
+.input1:focus {
+	border: 2px solid grey;
 }
 
 .input {
@@ -425,6 +465,55 @@ label {
 }
 
 /*create button css*/
+.addButton {
+	position: relative;
+	transition: all 0.3s ease-in-out;
+	box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+	padding-block: 0.5rem;
+	padding-inline: 1.25rem;
+	background-color: rgb(0 107 179);
+	border-radius: 9999px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffff;
+	gap: 10px;
+	font-weight: bold;
+	border: 3px solid #ffffff4d;
+	outline: none;
+	overflow: hidden;
+	font-size: 15px;
+	margin-top: 0px;
+	margin-left: 40px;
+}
+
+.createButton:hover {
+	transform: scale(1.05);
+	border-color: #fff9;
+}
+
+.addButton:hover .icon {
+	transform: translate(4px);
+}
+
+.addButton:hover::before {
+	animation: shine 1.5s ease-out infinite;
+}
+
+.addButton::before {
+	content: "";
+	position: absolute;
+	width: 100px;
+	height: 100%;
+	background-image: linear-gradient(120deg,
+			rgba(255, 255, 255, 0) 30%,
+			rgba(255, 255, 255, 0.8),
+			rgba(255, 255, 255, 0) 70%);
+	top: 0;
+	left: -100px;
+	opacity: 0.6;
+}
+
 .createButton {
 	position: relative;
 	transition: all 0.3s ease-in-out;

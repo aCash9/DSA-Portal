@@ -26,5 +26,7 @@ public class queries {
 	public static String getUserList = "select * from userslistdetails where userEmail = ?";
 	
 	public static String qetListQuestions = "Select * from %s "
-			+ "left join userquestatus on %s.queID = userquestatus.queID";
+			+ "left join userquestatus on %s.queID = userquestatus.queID AND userquestatus.email = ?";
+	
+	public static String getParticularUserList = "Select * from usersListDetails where listID = ?";
 }

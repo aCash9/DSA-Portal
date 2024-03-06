@@ -14,7 +14,7 @@
 <meta charset="UTF-8">
 <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 	rel='stylesheet'>
-<link rel="stylesheet" href="styles/styleWelcome.css">
+<link rel="stylesheet" href="styleWelcome.css">
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -141,6 +141,22 @@
 			<i class='bx bx-menu'></i> <span class="text">Greetings,
 				Coder!! </span>
 		</div>
+		<div class="container1">
+			<h2>Add List using List Code</h2>
+			<input placeholder="List ID" type="text" name="text" id="listID"
+					name="listID" class="input1" autocomplete="off">
+					
+			<button class="addButton" id="addList" type="button"
+					onclick="addList()">
+					Add List
+						<svg fill="currentColor" viewBox="0 0 24 24" class="icon">
+	    					<path clip-rule="evenodd"
+									d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
+									fill-rule="evenodd">
+							</path>
+	  					</svg>
+			</button>	
+		</div>
 		<div class="container">
 			<h2>Create Your List</h2>
 			<form id="listForm" method="post" action="welcomeServlet">
@@ -168,7 +184,7 @@
 				<!-- Button to create the list table -->
 				<button class="createButton" id="createTable" type="button"
 					onclick="createListTable()">
-					Create Table
+					Create List
 						<svg fill="currentColor" viewBox="0 0 24 24" class="icon">
 	    					<path clip-rule="evenodd"
 									d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm4.28 10.28a.75.75 0 000-1.06l-3-3a.75.75 0 10-1.06 1.06l1.72 1.72H8.25a.75.75 0 000 1.5h5.69l-1.72 1.72a.75.75 0 101.06 1.06l3-3z"
@@ -330,6 +346,32 @@
 			        }
 			    });
 			}
+		  
+		  function addList() {
+			 	var userEmail = '<%=userEmail%>';
+			    var listID = $("#listID").val();
+			    
+			    $.ajax({
+			        type: 'POST',
+			        url: 'addSharedList', // Replace with the actual servlet URL
+			        data: {
+			            userEmail: userEmail,
+			            listID: listID
+			        },
+			        success: function(response) {
+			            // Handle the success response if needed
+			            console.log(response);
+			            alert('List added successfully!');
+			            location.reload();
+			        },
+			        error: function(error) {
+			            // Handle the error if needed
+			            console.error(error);
+			            alert('Error with List Code');
+			        }
+			    });
+			}
+
 		  function validateForm() {
 			    // Get values from the input fields
 			    var listName = document.getElementById("listName").value;

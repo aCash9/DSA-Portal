@@ -6,22 +6,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import com.dbms.dao.questionsDao;
+import com.dbms.dao.UserListDao;
+import com.dbms.objects.ListDetails;
 
-public class updateQuestion extends HttpServlet {
+public class addSharedList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    
-    public updateQuestion() {
+	private UserListDao userlistdao = new UserListDao();
+    public addSharedList() {
         super();
         // TODO Auto-generated constructor stub
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String userEmail = request.getParameter("userEmail");
-        String questionId = request.getParameter("questionId");
-        String isChecked = request.getParameter("isChecked");
-        
-        questionsDao queDao = new questionsDao();
-        queDao.updateStatus(userEmail, questionId, isChecked);
+		String email = request.getParameter("userEmail");
+		String listID = request.getParameter("listID");
+		
+		ListDetails ld = userlistdao.getListDetails(listID);
+		userlistdao.addUserSharedListToTable(ld, email);
 	}
 
 }

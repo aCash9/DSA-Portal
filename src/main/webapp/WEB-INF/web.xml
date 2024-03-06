@@ -59,4 +59,14 @@
     <servlet-name>welcomeServlet</servlet-name>
     <url-pattern>/welcomeServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>addSharedList</display-name>
+    <servlet-name>addSharedList</servlet-name>
+    <servlet-class>com.dbms.servlet.addSharedList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>addSharedList</servlet-name>
+    <url-pattern>/addSharedList</url-pattern>
+  </servlet-mapping>
 </web-app>

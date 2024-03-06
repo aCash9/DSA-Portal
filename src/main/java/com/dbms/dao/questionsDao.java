@@ -6,13 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import com.dbms.objects.Question;
 import com.dbms.sql.queries;
 import com.dbms.util.DButil;
-
-import jakarta.servlet.http.HttpSession;
 
 public class questionsDao {
 	
@@ -57,8 +54,7 @@ public class questionsDao {
 			ps.setString(3, status);
 			ps.setString(4, status);
 			
-			int rowsAffected = ps.executeUpdate();
-
+			ps.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
 		}
