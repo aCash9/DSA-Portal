@@ -1,4 +1,9 @@
 <p align="center">
+  <a href="https://github.com/aCash9/DSA-Portal">
+    <img src="src/main/webapp/drawable/logo.jpg" alt="Logo" width="90" height="90">
+  </a>
+
+<p align="center">
   <h3 align="center">DSA Portal</h3>
   <p align="center">
     "Empower Your Learning with DSA Portal: Your Dynamic Solution for Managing DSA Question Lists!"
