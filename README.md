@@ -98,6 +98,3 @@ Contributions are welcome! Follow these steps to contribute to the project:
     </div>
 </div>
 
-        <p>User List</p>
-    </div>
-</div>
