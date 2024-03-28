@@ -72,21 +72,32 @@ Contributions are welcome! Follow these steps to contribute to the project:
 * **Akash Srivastava** - *Web Developer*
 
 ## Project Images 
+<div style="text-align: center;">
+    <div style="display: inline-block; text-align: center;">
+        <img src="src/main/webapp/drawable/login.jpg" width="1000" height="500" alt="Login Page">
+        <br>
+        <p style="text-align: center;">Login Page</p>
+    </div>
+    <br>
+    <div style="display: inline-block; text-align: center;">
+        <img src="src/main/webapp/drawable/home.jpg" width="1000" height="500" alt="Home Page">
+        <br>
+        <p style="text-align: center;">Home Page</p>
+    </div>
+    <br>
+    <div style="display: inline-block; text-align: center;">
+        <img src="src/main/webapp/drawable/queList.jpg" width="1000" height="500" alt="Question List">
+        <br>
+        <p style="text-align: center;">Question List</p>
+    </div>
+    <br>
+    <div style="display: inline-block; text-align: center;">
+        <img src="src/main/webapp/drawable/userList.jpg" width="1000" height="500" alt="User List">
+        <br>
+        <p style="text-align: center;">User List</p>
+    </div>
+</div>
 
-<a href="https://github.com/aCash9/DSA-Portal">
-    <img src="src/main/webapp/drawable/login.jpg" width="1000" height="500">
-    <br>
-    Login Page
-    <br><br>
-    <img src="src/main/webapp/drawable/home.jpg" width="1000" height="500">
-    <br>
-    Home Page
-    <br><br>
-    <img src="src/main/webapp/drawable/queList.jpg" width="1000" height="500">
-    <br>
-    Question List
-    <br><br>
-    <img src="src/main/webapp/drawable/userList.jpg" width="1000" height="500">
-  <br>
-    User List
-</a>
+        <p>User List</p>
+    </div>
+</div>
